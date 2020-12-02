@@ -52,8 +52,8 @@ df = pd.read_csv('COVID-19/time_series_covid19_confirmed_global.csv')
 df = df[df['Country/Region']=='Japan']
 df = df.iloc[:,4:].copy()
 data_at_japan = df.iloc[0,:]
-data_at_japan = data_at_japan['2020-01-23':'2020-10-28']
 data_at_japan.index = pd.to_datetime(data_at_japan.index)
+data_at_japan = data_at_japan['2020-01-22':'2020-10-28']
 
 # plot fig and save
 path = './log/original.png'
@@ -285,9 +285,9 @@ for i in range(upcoming_future):
 predictions_infected_pepole = scaler.inverse_transform(np.array(predictions).reshape(-1,1))
 # print(predictions_infected_pepole)
 
-x_all =np.arange('2020-01-23','2020-10-29', dtype='datetime64[D]').astype('datetime64[D]')
+x_all =np.arange('2020-01-22','2020-10-29', dtype='datetime64[D]').astype('datetime64[D]')
 x_past_predict = np.arange('2020-01-30','2020-10-22', dtype='datetime64[D]').astype('datetime64[D]')
-x_train = np.arange('2020-01-23','2020-10-22', dtype='datetime64[D]').astype('datetime64[D]')
+x_train = np.arange('2020-01-22','2020-10-22', dtype='datetime64[D]').astype('datetime64[D]')
 x_test = np.arange('2020-10-22', '2020-10-29', dtype='datetime64[D]').astype('datetime64[D]')
 
 # sns.set()
