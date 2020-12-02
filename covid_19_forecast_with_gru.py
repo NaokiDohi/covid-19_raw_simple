@@ -52,6 +52,7 @@ df = pd.read_csv('COVID-19/time_series_covid19_confirmed_global.csv')
 df = df[df['Country/Region']=='Japan']
 df = df.iloc[:,4:].copy()
 data_at_japan = df.iloc[0,:]
+data_at_japan = data_at_japan['2020-01-23':'2020-10-28']
 data_at_japan.index = pd.to_datetime(data_at_japan.index)
 
 # plot fig and save
@@ -68,43 +69,9 @@ if not os.path.exists(path):
 else:
   pass
 
-data_at_japan_diff = data_at_japan - data_at_japan.shift(1) # 階差系列データの作成
-data_at_japan_diff = data_at_japan_diff.dropna()
-data_at_japan_diff = data_at_japan_diff['2020-01-23':'2020-10-28']
-# print(data_at_japan_diff)
+res = sm.tsa.seasonal_decompose(data_at_japan, freq=7)#データを分解
 
-# plot fig and save
-path ='./log/diff.png'
-if not os.path.exists(path):
-    plt.figure(figsize=(10,5))
-    plt.plot(data_at_japan_diff)
-    plt.title('New confirmed cases in Japan', y=-0.2)
-    plt.xlabel("Date")
-    plt.ylabel("Confirmed cases (people)")
-    plt.grid(True)
-    plt.savefig(path)
-    plt.close()
-else:
-    pass
-
-diff_detail = data_at_japan_diff[-31:]
-
-path ='./log/diff.png'
-if not os.path.exists(path):
-    plt.figure(figsize=(18,8))
-    plt.plot(diff_detail)
-    plt.title('New confirmed cases in Japan', y=-0.2)
-    plt.xlabel("Date")
-    plt.ylabel("Confirmed cases (people)")
-    plt.grid(True)
-    plt.savefig(path)
-    plt.close()
-else:
-    pass
-
-res = sm.tsa.seasonal_decompose(data_at_japan_diff)#データを分解
-
-original = data_at_japan_diff # オリジナルデータ
+original = data_at_japan # オリジナルデータ
 trend_original = res.trend # トレンドデータ
 seasonal_original = res.seasonal # 季節性データ
 residual = res.resid # 残差データ
@@ -146,7 +113,7 @@ if not os.path.exists(path):
 else:
     pass
 
-y = data_at_japan_diff.values.astype(float)
+y = data_at_japan.values.astype(float)
 # print(len(y))
 
 # train_test_split
@@ -326,12 +293,12 @@ x_test = np.arange('2020-10-22', '2020-10-29', dtype='datetime64[D]').astype('da
 # sns.set()
 path = "gru/prediction/prediction_"+str(n_hidden)+"_"+str(drop_out)+".png"
 plt.figure(figsize=(20,8))
-plt.title('New confirmed cases in Japan', y=-0.15)
+plt.title('Cumulative confirmed cases in Japan', y=-0.15)
 plt.xlabel("Date")
 plt.ylabel("Confirmed cases (people)")
 # plt.plot(x_train,train_original_data,label='train_data')
 # plt.plot(x_test,test_original_data,label='test_data')
-plt.plot(x_all, data_at_japan_diff, 'g', lw=3, label='daily_at_japan')
+plt.plot(x_all, data_at_japan, 'g', lw=3, label='daily_at_japan')
 plt.plot(x_past_predict, train_inverse, color='b', ls='-', lw=3, alpha=0.7, label='past_predict')
 plt.plot(x_test, predictions_infected_pepole, 'r', lw=3, alpha=0.7, label='upcoming_future')
 plt.grid(True)
@@ -343,7 +310,7 @@ plt.close()
 # sns.set()
 path = "gru/prediction_detail/prediction_detail_"+str(n_hidden)+"_"+str(drop_out)+".png"
 plt.figure(figsize=(20,8))
-plt.title("New confirmed cases in Japan", y=-0.15)
+plt.title('Cumulative confirmed cases in Japan', y=-0.15)
 plt.xlabel("Date")
 plt.ylabel("Confirmed cases (people)")
 plt.plot(x_test, test_original_data,color='b', ls='-',lw=3,alpha=0.7, label='past_predict')
@@ -406,7 +373,7 @@ print('test_r2:'+str(test_r2))# 最も当てはまりの良い場合、1.0 と�
 # plt.grid(True)
 # plt.xlabel("Day(/Day)")
 # plt.ylabel("Nunber of Person infected with corona virus(/people)")
-# plt.plot(x_all,data_at_japan_diff,'g',lw=3,label='daily_at_japan')
+# plt.plot(x_all,data_at_japan,'g',lw=3,label='daily_at_japan')
 # plt.plot(x_long_term, predictions_infected_pepole_long_term, 'r',lw=3,alpha=0.7,label='upcoming_future')
 # plt.legend(loc='upper left')
 # plt.show()
