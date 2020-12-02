@@ -198,7 +198,7 @@ print("")
 #     verbose=0,
 # )
 
-epochs = 200
+epochs = 1#200
 start_time = time.time()
 history = model.fit(study_data,
                     correct_data,
@@ -286,7 +286,7 @@ predictions_infected_pepole = scaler.inverse_transform(np.array(predictions).res
 # print(predictions_infected_pepole)
 
 x_all =np.arange('2020-01-22','2020-10-29', dtype='datetime64[D]').astype('datetime64[D]')
-x_past_predict = np.arange('2020-01-30','2020-10-22', dtype='datetime64[D]').astype('datetime64[D]')
+x_past_predict = np.arange('2020-01-29','2020-10-22', dtype='datetime64[D]').astype('datetime64[D]')
 x_train = np.arange('2020-01-22','2020-10-22', dtype='datetime64[D]').astype('datetime64[D]')
 x_test = np.arange('2020-10-22', '2020-10-29', dtype='datetime64[D]').astype('datetime64[D]')
 
