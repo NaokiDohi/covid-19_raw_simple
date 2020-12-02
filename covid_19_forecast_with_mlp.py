@@ -199,7 +199,7 @@ print("")
 #     verbose=0,
 # )
 
-epochs = 1#200
+epochs = 200
 start_time = time.time()
 history = model.fit(study_data,
                     correct_data,
